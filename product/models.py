@@ -1,4 +1,5 @@
 from django.db import models
+from seller_accounts.models import Seller
 
 
 class Category(models.Model):
@@ -10,8 +11,9 @@ class Category(models.Model):
 
 
 class Product(models.Model):
+    Seller = models.ForeignKey(Seller, null=True, on_delete=models.CASCADE)
     title = models.CharField(max_length=100, null=True)
-    description = models.CharField(max_length=1000, null=True)
+    description = models.TextField()
     product_image = models.ImageField(default="product.jpg", null=True)
     category = models.ForeignKey(Category, null=True, on_delete=models.CASCADE)
     price = models.FloatField('Price : $', null=True)

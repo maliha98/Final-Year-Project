@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User, auth
 from .forms import *
+from .decorators import *
 
 
 def seller_signInPage(request):
@@ -60,6 +61,7 @@ def seller_signUpPage(request):
 
 
 @login_required
+@allowed_users(allowed_roles=['Seller'])
 def seller_profilePage(request):
     seller = request.user.seller
     form = SellerForm(instance=seller)

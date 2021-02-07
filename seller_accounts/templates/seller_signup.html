@@ -2,30 +2,28 @@
 <title>Sign Up</title>
 {% endblock title %} {% block content %}
 <style>
-    .login {
-  margin-top: 120px;
-  margin-bottom: 40px;
-  width: 30%;
-  left: 35%;
-}
-
-@media screen and (max-width: 930px) {
   .login {
-    left: 1%;
-    width: 95%;
-    margin: 2%;
+    margin-top: 120px;
+    margin-bottom: 40px;
+    width: 30%;
+    left: 35%;
   }
-}
+
+  @media screen and (max-width: 930px) {
+    .login {
+      left: 1%;
+      width: 95%;
+      margin: 2%;
+    }
+  }
 </style>
 <div class="card login">
- 
   <form class="text-center border border-light p-5" method="POST">
     {% csrf_token%}
-    <p class="h4 mb-4">Sign up</p>
+    <p class="h4 mb-4">Create a seller account</p>
 
     <div class="form-row mb-4">
       <div class="col">
-     
         <input
           type="text"
           id="defaultRegisterFormFirstName"
@@ -35,7 +33,6 @@
         />
       </div>
       <div class="col">
-       
         <input
           type="text"
           id="defaultRegisterFormLastName"
@@ -81,7 +78,9 @@
       name="password2"
       aria-describedby="defaultRegisterFormPasswordHelpBlock"
     />
-    <button class="btn btn-outline-dark my-4 btn-block" type="submit">Sign Up</button>
+    <button class="btn btn-outline-dark my-4 btn-block" type="submit">
+      Sign Up
+    </button>
     <p>
       Already a member?
       <a href="{% url 'signin' %}">Login</a>

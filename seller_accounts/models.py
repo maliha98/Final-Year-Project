@@ -5,6 +5,8 @@ from django.contrib.auth.models import User
 # Create your models here.
 class Seller(models.Model):
     user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
+    first_name = models.CharField(max_length=200, null=True)
+    last_name = models.CharField(max_length=200, null=True)
     company_name = models.CharField(max_length=200, null=True)
     about = models.CharField(max_length=200, null=True)
     phone = models.CharField(max_length=200, null=True)

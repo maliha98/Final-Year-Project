@@ -1,0 +1,26 @@
+{% extends 'base.html' %} {% load static %}
+<!--Block-->
+{% block content %} {% for i in product %}
+<div class="jumbotron">
+  <img
+    src="{{ i.product_image.url }}"
+    style="object-fit: cover; width: 50%; height: 250"
+    class="card-img-top"
+    alt="loading..."
+  />
+
+  <h1 class="display-4">{{i.title}}</h1>
+  <p class="lead">{{i.description}}</p>
+  <hr class="my-4" />
+  <p>Price: ${{i.price}}</p>
+  <p class="lead">
+    <a
+      href="{% url 'cart' i.id %}#{{i.id}}"
+      type="button"
+      class="btn btn-sm btn-light"
+      ><i style="font-size: 18px" class="fa fa-cart-plus" aria-hidden="true"></i
+    ></a>
+  </p>
+  {{i.Seller.company_name}}
+</div>
+{% endfor %} {% endblock content %}

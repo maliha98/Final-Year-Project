@@ -10,6 +10,8 @@ def seller_profile(sender, instance, created, **kwargs):
         instance.groups.add(group)
         Seller.objects.create(
             user=instance,
+            first_name=instance.first_name,
+            last_name=instance.last_name,
             email=instance.email,
         )
 

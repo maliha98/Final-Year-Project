@@ -19,6 +19,11 @@ def categoryView(request, id):
     return render(request, 'category.html', {'product': product, 'category': category})
 
 
+def detailsView(request, id):
+    product = Product.objects.filter(id=id)
+    return render(request, 'details.html', {'product': product})
+
+
 def cartView(request):
     user = request.user
     cart_item = Cart.objects.filter(user=user, purchased=False)
