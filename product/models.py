@@ -3,6 +3,7 @@ from seller_accounts.models import Seller
 
 
 class Category(models.Model):
+    Seller = models.ForeignKey(Seller, null=True, on_delete=models.CASCADE)
     category = models.CharField(max_length=100, null=True)
 
     def __str__(self):

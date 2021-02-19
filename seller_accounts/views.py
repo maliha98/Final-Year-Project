@@ -5,6 +5,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User, auth
 from .forms import *
 from .decorators import *
+from product.models import *
+from .filters import *
 
 
 def seller_signInPage(request):
@@ -73,3 +75,37 @@ def seller_profilePage(request):
 
     context = {'form': form}
     return render(request, 'seller_profile.html', context)
+
+
+def dashboard(request):
+    return render(request, 'admin/dashboard.html')
+
+
+def productsView(request):
+    product = Product.objects.all().filter(Seller=request.user.seller)
+    search = ProductFilter(request.GET, queryset=product)
+    product = search.qs
+    context = {
+        'product': product,
+        'search': search,
+    }
+    return render(request, 'admin/products.html', context)
+
+
+def productDetailView(request, id):
+    product = Product.objects.get(id=id)
+
+    context = {
+        'product': product,
+    }
+    return render(request, 'admin/product_detail.html', context)
+
+
+def categoryView(request):
+    category = Category.objects.all().filter(Seller=request.user.seller)
+    context = {'category': category}
+    return render(request, 'admin/category.html', context)
+
+
+def ordersView(request):
+    return render(request, 'admin/orders.html')
