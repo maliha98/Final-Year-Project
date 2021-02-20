@@ -8,7 +8,7 @@ class Seller(models.Model):
     first_name = models.CharField(max_length=200, null=True)
     last_name = models.CharField(max_length=200, null=True)
     company_name = models.CharField(max_length=200, null=True)
-    about = models.CharField(max_length=200, null=True)
+    about = models.TextField(null=True)
     phone = models.CharField(max_length=200, null=True)
     email = models.CharField(max_length=200, null=True)
     address = models.TextField()

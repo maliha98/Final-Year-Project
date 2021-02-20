@@ -31,12 +31,12 @@
   <body id="page-top">
     <!-- Page Wrapper -->
     <div id="wrapper">
+      {% if user.is_authenticated %}
       <!-- Sidebar -->
       <ul
         class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion pl-2"
         id="accordionSidebar"
       >
-        {% if user.is_authenticated %}
         <!-- Sidebar - Brand -->
         <a
           class="sidebar-brand d-flex align-items-center justify-content-center"
@@ -53,7 +53,6 @@
             {{request.user.seller.company_name}}
           </div>
         </a>
-        {% endif %}
 
         <!-- Divider -->
         <hr class="sidebar-divider my-0" />
@@ -153,7 +152,7 @@
               </li>
 
               <div class="topbar-divider d-none d-sm-block"></div>
-              {% if user.is_authenticated %}
+
               <!-- Nav Item - User Information -->
               <li class="nav-item dropdown no-arrow">
                 <a
@@ -178,7 +177,7 @@
                   class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                   aria-labelledby="userDropdown"
                 >
-                  <a class="dropdown-item" href="#">
+                  <a class="dropdown-item" href="{% url 'seller_profile' %}">
                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                     Profile
                   </a>
@@ -196,9 +195,9 @@
                   </a>
                 </div>
               </li>
-              {% endif %}
             </ul>
           </nav>
+          {% endif %}
           <!-- End of Topbar -->
 
           {% block content %}{% endblock content %}
@@ -257,7 +256,9 @@
             >
               Cancel
             </button>
-            <a class="btn btn-primary" href="login.html">Logout</a>
+            <a class="btn btn-primary" href="{% url 'seller_logout' %}"
+              >Logout</a
+            >
           </div>
         </div>
       </div>

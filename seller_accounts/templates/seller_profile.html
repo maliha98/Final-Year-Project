@@ -1,5 +1,5 @@
-{% extends 'base.html' %} {% block title %}{% load crispy_forms_tags %}
-<title>Profile</title>
+{% extends 'admin.html' %} {% block title %}{% load crispy_forms_tags %}
+<title>Seller-Profile</title>
 {% endblock title %} {% block content %}
 <section class="account bg-light">
   <div class="animated fadeInDown login bg-light px-5 mx-5 my-5">
@@ -19,13 +19,14 @@
       <div class="row">
         <div class="col">
           <!-- First name -->
-          <div class="text-left">{{form.company_name|as_crispy_field}}</div>
+          <div class="text-left">{{form.first_name|as_crispy_field}}</div>
         </div>
         <div class="col">
-          <div class="text-left">{{form.about|as_crispy_field}}</div>
+          <div class="text-left">{{form.last_name|as_crispy_field}}</div>
         </div>
       </div>
-
+      <div class="text-left">{{form.company_name|as_crispy_field}}</div>
+      <div class="text-left">{{form.about|as_crispy_field}}</div>
       <!-- Email  -->
       <div class="text-left">{{form.email|as_crispy_field}}</div>
       <!-- Phone number -->
@@ -45,6 +46,6 @@
 </section>
 <script>
   var form_fields = document.getElementsByTagName("input");
-  form_fields[3].readOnly = true;
+  form_fields[6].readOnly = true;
 </script>
 {% endblock content %}

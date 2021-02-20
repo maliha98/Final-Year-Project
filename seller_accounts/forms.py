@@ -8,10 +8,3 @@ class SellerForm(ModelForm):
         model = Seller
         fields = '__all__'
         exclude = ['user']
-        labels = {
-            'first_name': '',
-            'last_name': '',
-            'email': '',
-            'phone': '',
-            'profile_pic': '',
-        }

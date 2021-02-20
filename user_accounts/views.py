@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import User, auth
+from django.contrib.auth.models import User, auth, Group
 from .forms import *
 
 
@@ -27,7 +27,7 @@ def logoutPage(request):
 
 
 def signUpPage(request):
-
+    group = Group.objects.get(name='Customer')
     if request.method == 'POST':
         first_name = request.POST['fname']
         last_name = request.POST['lname']
@@ -46,6 +46,7 @@ def signUpPage(request):
             else:
                 user = User.objects.create_user(
                     username=username, password=password1, email=email, first_name=first_name, last_name=last_name)
+                user.groups.add(group)
                 user.save()
 
                 return redirect('signin')
