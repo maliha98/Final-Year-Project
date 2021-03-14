@@ -14,5 +14,6 @@ urlpatterns = [
     path('checkout/', checkout, name='checkout'),
     path('address_update/<id>', address_form, name='address_update'),
     path('payment/', payment, name='payment'),
+    path('orders_user/', orderView, name='orders_user'),
     path('about/', aboutPage, name='about'),
 ]

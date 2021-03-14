@@ -2,16 +2,25 @@ from django.shortcuts import render, redirect, reverse, get_object_or_404
 from product.models import Product, Category
 from .models import Cart, Order_Product, address
 from .form import AddressForm
+from seller_accounts.filters import *
+from django.contrib import messages
 # Create your views here.
 
 
-def homeView(request):
+def homeView(request):  # list all products and category in home page
     product = Product.objects.all()
     category = Category.objects.all()
-    return render(request, 'index.html', {'product': product, 'category': category})
+    search = ProductFilter(request.GET, queryset=product)
+    product = search.qs
+    context = {
+        'product': product,
+        'search': search,
+        'category': category
+    }
+    return render(request, 'index.html', context)
 
 
-def categoryView(request, id):
+def categoryView(request, id):  # list categorized item
 
     product = Product.objects.all().filter(category_id=id)
     category = Category.objects.all()
@@ -19,12 +28,12 @@ def categoryView(request, id):
     return render(request, 'category.html', {'product': product, 'category': category})
 
 
-def detailsView(request, id):
+def detailsView(request, id):  # Product details
     product = Product.objects.filter(id=id)
     return render(request, 'details.html', {'product': product})
 
 
-def cartView(request):
+def cartView(request):  # display all cart list
     user = request.user
     cart_item = Cart.objects.filter(user=user, purchased=False)
     category = Category.objects.all()
@@ -36,7 +45,7 @@ def cartView(request):
         return render(request, 'cart.html')
 
 
-def addToCart(request, id):
+def addToCart(request, id):  # adds items to cart
     product_item = get_object_or_404(Product, id=id)
     order_item, created = Cart.objects.get_or_create(
         product=product_item,
@@ -61,7 +70,7 @@ def addToCart(request, id):
         return redirect("home")
 
 
-def plusCart(request, id):
+def plusCart(request, id):  # increase carts item
     product_item = get_object_or_404(Product, id=id)
     order_item, created = Cart.objects.get_or_create(
         product=product_item,
@@ -86,7 +95,7 @@ def plusCart(request, id):
         return redirect("cart")
 
 
-def minusCart(request, id):
+def minusCart(request, id):  # decrease cart items
     product_item = get_object_or_404(Product, id=id)
     order_item, created = Cart.objects.get_or_create(
         product=product_item,
@@ -117,7 +126,7 @@ def minusCart(request, id):
         return redirect("cart")
 
 
-def removeCart(request, id):
+def removeCart(request, id):  # delete items from cart
     product_item = get_object_or_404(Product, id=id)
     order_item, created = Cart.objects.get_or_create(
         product=product_item,
@@ -199,7 +208,33 @@ def checkout(request):
 
 
 def payment(request):
+    order = Order_Product.objects.get(user=request.user, ordered=False)
+    order_total = order.orderTotal()
+    totalPenny = int(float(order_total * 100))
+    order.ordered = True
+    order.save()
+    cartItems = Cart.objects.filter(user=request.user)
+    for item in cartItems:
+        item.purchased = True
+        item.save()
     return render(request, 'payment.html')
+
+
+def orderView(request):
+
+    pending_orders = Order_Product.objects.all().filter(
+        user=request.user, ordered=True, status='Pending')
+    delivered_orders = Order_Product.objects.all().filter(
+        user=request.user, ordered=True, status='Delivered')
+    cancled_orders = Order_Product.objects.all().filter(
+        user=request.user, ordered=True, status='Cancled')
+    context = {
+        "pending_orders": pending_orders,
+        "delivered_orders": delivered_orders,
+        "cancled_orders": cancled_orders,
+    }
+
+    return render(request, 'ordered.html', context)
 
 
 def aboutPage(request):

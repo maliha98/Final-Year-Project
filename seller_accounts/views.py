@@ -8,9 +8,10 @@ from .decorators import *
 from product.models import *
 from .filters import *
 from .models import Seller
+from .forms import *
 
 
-def seller_signInPage(request):
+def seller_signInPage(request):  # Signin views for seller
 
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -25,12 +26,12 @@ def seller_signInPage(request):
     return render(request, 'seller_signin.html')
 
 
-def seller_logoutPage(request):
+def seller_logoutPage(request):  # logout for seller
     logout(request)
     return redirect('seller_signin')
 
 
-def seller_signUpPage(request):
+def seller_signUpPage(request):  # Signup views for seller
 
     mygroup = Group.objects.get(name='Seller')
 
@@ -75,7 +76,7 @@ def seller_signUpPage(request):
 
 @login_required
 @allowed_users(allowed_roles=['Seller'])
-def seller_profilePage(request):
+def seller_profilePage(request):  # Profile Page views for seller
     seller = request.user.seller
     form = SellerForm(instance=seller)
 
@@ -88,7 +89,7 @@ def seller_profilePage(request):
     return render(request, 'seller_profile.html', context)
 
 
-@login_required(login_url='/seller_signin/')
+@login_required(login_url='/seller_signin/')  # Dashboard for only seller
 @allowed_users(allowed_roles=['Seller'])
 def dashboard(request):
     return render(request, 'admin/dashboard.html')
@@ -117,6 +118,8 @@ def productDetailView(request, id):
     }
     return render(request, 'admin/product_detail.html', context)
 
+# Product Create
+
 
 @login_required(login_url='/seller_signin/')
 @allowed_users(allowed_roles=['Seller'])
@@ -126,7 +129,73 @@ def categoryView(request):
     return render(request, 'admin/category.html', context)
 
 
+@allowed_users(allowed_roles=['Seller'])
+def category_form(request, id=0):
+    if request.method == "GET":
+        if id == 0:
+            form = CategoryForm()
+        else:
+            category = Category.objects.get(Seller=request.user.seller, id=id)
+            form = CategoryForm(instance=category)
+        return render(request, "admin/category_form.html", {'form': form})
+    else:
+        if id == 0:
+            form = CategoryForm(request.POST)
+        else:
+            category = Category.objects.get(Seller=request.user.seller, id=id)
+            form = CategoryForm(request.POST, instance=category)
+
+        if form.is_valid():
+            form.save()
+        return redirect('category')
+
+
+@allowed_users(allowed_roles=['Seller'])
+def category_create(request):
+    if request.method == "POST":
+        category = request.POST.get('category')
+        Category.objects.create(Seller=request.user.seller, category=category)
+    return render(request, "admin/category_create.html")
+
+
+@allowed_users(allowed_roles=['Seller'])
+def category_delete(request, id):
+    category = Category.objects.get(id=id)
+    category.delete()
+    return redirect('category')
+
+
 @login_required(login_url='/seller_signin/')
 @allowed_users(allowed_roles=['Seller'])
-def ordersView(request):
-    return render(request, 'admin/orders.html')
+def orderViewAdmin(request):
+
+    orders = Order_Product.objects.all().filter(ordered=True)
+
+    mFilter = OrderFilter(request.GET, queryset=orders)
+    orders = mFilter.qs
+    context = {
+        'orders': orders,
+        'mFilter': mFilter
+    }
+
+    return render(request, 'admin/orders.html', context)
+
+
+def orderForm(request, id=id):
+
+    if request.method == "GET":
+        if id == 0:
+            form = OrderStatusForm()
+        else:
+            order = Order_Product.objects.get(id=id)
+            form = OrderStatusForm(instance=order)
+        return render(request, "admin/order_form.html", {'form': form})
+    else:
+        if id == 0:
+            form = OrderStatusForm(request.POST)
+        else:
+            order = Order_Product.objects.get(id=id)
+            form = OrderStatusForm(request.POST, instance=order)
+        if form.is_valid():
+            form.save()
+        return redirect('orders')

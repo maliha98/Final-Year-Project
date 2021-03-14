@@ -24,7 +24,7 @@ class address(models.Model):
     phone = models.CharField(max_length=14, null=True)
 
     def __str__(self):
-        return self.user.cityName
+        return self.cityName
 
 
 class Order_Product(models.Model):
@@ -41,7 +41,7 @@ class Order_Product(models.Model):
         max_length=100, null=True, choices=CHOICES, default=CHOICES[0][0])
 
     def __str__(self):
-        return self.user.first_name
+        return self.user.username
 
     def orderTotal(self):
         t = 0
