@@ -46,6 +46,10 @@
       {% endfor %}
       <!-- Register -->
       <p>
+         <div>
+          <!-- Forgot password -->
+          <a href="{% url 'reset_password' %}">Forgot password?</a>
+        </div>
         Not a member?
         <a href="{% url 'signup' %}">Register</a>
       </p>

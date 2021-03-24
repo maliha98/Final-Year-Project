@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User, auth, Group
 from .forms import *
+from django_email_verification import send_email
 
 
 def signInPage(request):
@@ -47,6 +48,8 @@ def signUpPage(request):
                 user = User.objects.create_user(
                     username=username, password=password1, email=email, first_name=first_name, last_name=last_name)
                 user.groups.add(group)
+                user.is_active = False
+                send_email(user)
                 user.save()
 
                 return redirect('signin')

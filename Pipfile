@@ -10,6 +10,7 @@ django = "*"
 django-crispy-forms = "*"
 pillow = "*"
 django-filter = "*"
+django-email-verification = "*"
 
 [requires]
 python_version = "3.9"
